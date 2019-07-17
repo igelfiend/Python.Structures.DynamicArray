@@ -104,8 +104,8 @@ class DynArray:
         for j in range(i, self.count-1):
             self.array[ j ] = self.array[ j+1 ]
 
-        self._decrease_buffer()
         self.count -= 1
+        self._decrease_buffer()
 
     def to_list(self):
         """
@@ -131,5 +131,6 @@ class DynArray:
         All required checks performs here.
         """
         decrease_capacity = int(self.capacity / 1.5)
-        if self.count < decrease_capacity:
+        decrease_criteria = int(self.capacity * 0.5)
+        if self.count < decrease_criteria:
             self.resize(decrease_capacity)

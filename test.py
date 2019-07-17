@@ -126,11 +126,15 @@ class TestDynArray(unittest.TestCase):
                       11, 12, 13, 14, 15,
                       16, 17, 18, 19, 20,
                       21, 22, 23, 24]
+        old_cap = int(test_data.capacity)
         test_data.delete(1)
+        new_cap = test_data.capacity
         self.assertEqual(test_data.to_list(), valid_data,
                          "Test REMOVE. Normal case. Result lists are not equal")
-        self.assertEqual(test_data.capacity, 32,
-                         "Test REMOVE. Normal case. Capacity size incorrect")
+        self.assertEqual(old_cap, 32,
+                         "Test REMOVE. Normal case. Old capacity size was incorrect")
+        self.assertEqual(old_cap, 32,
+                         "Test REMOVE. Normal case. New capacity size is incorrect")
 
     def test_remove_negative_index_case(self):
         test_data = prepare_array(5)
@@ -161,11 +165,12 @@ class TestDynArray(unittest.TestCase):
                          "Test REMOVE. Too large index case. Error wasn\'t thrown")
 
     def test_decrease_buffer_case(self):
-        test_data = prepare_array(20)
-        valid_data = [0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
-                      11, 12, 13, 14, 15, 16, 17, 18, 19]
+        test_data = prepare_array(17)
+        valid_data = [0,  1,  2,  3,  4,  5,  6,  7,
+                      8,  11, 12, 13, 14, 15, 16]
         old_cap = int(test_data.capacity)
-        test_data.delete(10)
+        test_data.delete(9)
+        test_data.delete(9)
         new_cap = test_data.capacity
         self.assertEqual(test_data.to_list(), valid_data,
                          "Test REMOVE. Decrease buffer case. Result lists are not equal")
@@ -177,13 +182,18 @@ class TestDynArray(unittest.TestCase):
     def test_remove_prevent_buffer_decreasing_with_min_cap_case(self):
         test_data = prepare_array(5)
         valid_data = [0, 2, 3, 4]
+        old_cap = int(test_data.capacity)
         test_data.delete(1)
+        new_cap = test_data.capacity
         self.assertEqual(test_data.to_list(), valid_data,
                          "Test REMOVE. Prevent buffer decreasing with min capacity case."
                          "Result lists are not equal")
-        self.assertEqual(test_data.capacity, 16,
+        self.assertEqual(old_cap, 16,
                          "Test REMOVE. Prevent buffer decreasing with min capacity case."
-                         "Capacity size incorrect")
+                         "Old capacity size was incorrect")
+        self.assertEqual(new_cap, 16,
+                         "Test REMOVE. Prevent buffer decreasing with min capacity case."
+                         "New capacity size is incorrect")
 
 
 if __name__ == '__main__':
